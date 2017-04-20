@@ -47,8 +47,6 @@ namespace APIServices.Helpers
         }
 
         public async Task<string> Post(string messageContent, string relativeUri)
-
-
         {
             var handler = new HttpClientHandler();
 
@@ -65,12 +63,11 @@ namespace APIServices.Helpers
                 request.Headers.Add("Authorization", this.AuthToken);
 
             }
-            //request.Headers.Add("Content-Type", "application/json");
-            //HttpContent cont = messageContent;
+
             HttpResponseMessage response = await _httpClient.SendAsync(request);
 
             
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if ((response.StatusCode == System.Net.HttpStatusCode.OK) || (response.StatusCode == System.Net.HttpStatusCode.Created))
             {
                 return response.Content.ReadAsStringAsync().Result;
             }

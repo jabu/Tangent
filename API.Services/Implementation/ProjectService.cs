@@ -43,35 +43,12 @@ namespace API.Services.Implementation
                 throw new HttpException(404, "Projects not found");
             }
         }
-              
-        public async Task<Project1> Post(Project1 project)
+         
+        public async Task<Project> AddProject(Project1 project1)
         {
             string token = HttpContext.Current.Session["token"].ToString();
             HttpResponseMessage m = new HttpResponseMessage();
-            Project1 p = new Project1();
-            
-                TokenObject tokenValue = new TokenObject();
-                JsonConvert.PopulateObject(token, tokenValue);
-                this.AuthToken = tokenValue.token;
-                var obj = JsonConvert.SerializeObject(project);
-                var result = await this.Post(obj, "api/v1/projects/");
-
-                if (!string.IsNullOrEmpty(result))
-                {
-                    JsonConvert.PopulateObject(result, p);
-                    return p;
-                }
-            else
-            {
-                throw new HttpException(404, "Projects not found");
-            }
-        }
-
-        public async Task<Project1> GetUserToken(Project1 project1)
-        {
-            string token = HttpContext.Current.Session["token"].ToString();
-            HttpResponseMessage m = new HttpResponseMessage();
-            Project1 p = new Project1();
+            Project p = new Project();
 
             TokenObject tokenValue = new TokenObject();
             JsonConvert.PopulateObject(token, tokenValue);

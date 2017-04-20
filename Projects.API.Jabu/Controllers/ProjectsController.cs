@@ -36,23 +36,14 @@ namespace Projects.API.Jabu.Controllers
 
         [Route("api/post")]
         [HttpGet]
-        public async Task<Project1> Get([FromBody] Project1 prj)
+        public async Task<Project> Get([FromBody] Project1 prj)
         {
            
             try
-            {
-                //TaskProjectSerializer tps = new TaskProjectSerializer() { Title = "Test", Description = "TEst", Start_date = new DateTime(2017, 05, 05), End_date = new DateTime(2017, 07, 05), Is_active = true, Is_Billable = true };
-                Project1 p;
-                //TaskSerializer[] t = new TaskSerializer[1];
-                //TaskSerializer ts = new TaskSerializer() { Id = 1, Due_date = new DateTime(2017, 05, 01), Estimated_Hours = 12, Project_data = tps, Title = "Task Serializer" };
-                //t[0] = ts;
-                //ResourceSerializer[] r = new ResourceSerializer[1];
-                //ResourceSerializer rs = new ResourceSerializer() { id = 1, Start_date = new DateTime(2017, 05, 05), End_date = new DateTime(2017, 06, 05), Agreed_hours_per_month = 240, Created = new DateTime(2017, 05, 05), Rate = 154, Updated = new DateTime(2017, 05, 05), User = "Test" };
-                //r[0] = rs;
-                //var p = new Project1() {title = "TestingPoject 5", description = "Test Post", start_date = new DateTime(2017, 05, 05), end_date = new DateTime(2018, 05, 05), is_billable = true, is_active = true };
-                p = new Project1();
-                p = await _projectInterface.GetUserToken(p);
-
+            {               
+                Project p;
+                p = new Project();
+                p = await _projectInterface.AddProject(prj);
                 return p;
             }
             catch (Exception e)
