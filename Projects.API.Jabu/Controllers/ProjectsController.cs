@@ -34,25 +34,51 @@ namespace Projects.API.Jabu.Controllers
             return projects;
         }
 
-        [Route("api/post")]
-        [HttpGet]
-        public async Task<Project> Get([FromBody] Project1 prj)
+        [HttpDelete]
+        public async Task<string> DeleteProject(int id)
         {
-           
             try
-            {               
-                Project p;
-                p = new Project();
-                p = await _projectInterface.AddProject(prj);
-                return p;
+            {
+                string results = "";
+                results = await _projectInterface.DeleteProject(id);
+                return results;
             }
             catch (Exception e)
             {
                 throw new System.Web.HttpException(404, e.InnerException.ToString());
             }
-
-           
         }
 
+        [HttpGet]
+        public async Task<Project> UpdateProject([FromBody]Project1 prj)
+        {
+            try
+            {
+                Project project = new Project();
+                project = await _projectInterface.UpdateProject(prj);
+                return project;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public async Task<Project> GetProject(int id)
+        {
+            try
+            {
+                Project project = new Project();
+                project = await _projectInterface.GetProject(196);
+                return project;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

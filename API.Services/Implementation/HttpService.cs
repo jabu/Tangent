@@ -119,7 +119,7 @@ namespace APIServices.Helpers
                 Content = new StringContent(messageContent, Encoding.UTF8, "application/json")
             };
             
-            request.Headers.Add("Authorization", "Bearer " + this.AuthToken);
+            request.Headers.Add("Authorization", this.AuthToken);
 
             HttpResponseMessage response = await _httpClient.SendAsync(request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -132,6 +132,32 @@ namespace APIServices.Helpers
                 {
                     return "OK";
                 }
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+            {
+                return null;
+            }
+            else
+            {
+                throw new UnsuccessfulQueryException(response.Content.ReadAsStringAsync().Result);
+            }
+        }
+
+        public async Task<string> Delete(string relativeUri)
+        {
+            var handler = new HttpClientHandler();
+
+            var _httpClient = new HttpClient(handler) { BaseAddress = new Uri(BaseUrl) };
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, relativeUri);
+            request.Headers.Add("Authorization", this.AuthToken);
+
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return response.Content.ReadAsStringAsync().Result;
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
             {

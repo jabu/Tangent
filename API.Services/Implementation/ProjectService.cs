@@ -43,7 +43,30 @@ namespace API.Services.Implementation
                 throw new HttpException(404, "Projects not found");
             }
         }
-         
+
+        public async Task<Project> GetProject(int id)
+        {
+            string token = HttpContext.Current.Session["token"].ToString();
+            HttpResponseMessage m = new HttpResponseMessage();
+            Project project = new Project();
+
+            TokenObject tokenValue = new TokenObject();
+            JsonConvert.PopulateObject(token, tokenValue);
+            this.AuthToken = tokenValue.token;
+
+            var result = await this.Get("api/v1/projects/195/");
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                JsonConvert.PopulateObject(result, project);
+                return project;
+            }
+            else
+            {
+                throw new HttpException(404, "Projects not found");
+            }
+        }
+
         public async Task<Project> AddProject(Project1 project1)
         {
             string token = HttpContext.Current.Session["token"].ToString();
@@ -65,6 +88,55 @@ namespace API.Services.Implementation
                 JsonConvert.PopulateObject(result, p);
 
                 return p;
+            }
+            else
+            {
+                throw new Exception("Error Occured");
+            }
+        }
+
+        public async Task<Project> UpdateProject(Project1 project1)
+        {
+            string token = HttpContext.Current.Session["token"].ToString();
+            HttpResponseMessage m = new HttpResponseMessage();
+            Project p = new Project();
+
+            TokenObject tokenValue = new TokenObject();
+            JsonConvert.PopulateObject(token, tokenValue);
+            this.AuthToken = tokenValue.token;
+
+            var postContent = JsonConvert.SerializeObject(new { pk = 196, title = "Updated", description = "Updated", start_date = "2005-05-05", end_date = "2008-06-05", is_billable = false, is_active = false });
+
+            var result = await this.Put(postContent, "api/v1/projects/196/");
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                object Rproject = JsonConvert.DeserializeObject(result);
+
+                JsonConvert.PopulateObject(result, p);
+
+                return p;
+            }
+            else
+            {
+                throw new Exception("Error Occured");
+            }
+        }
+
+        public async Task<string> DeleteProject(int id)
+        {
+            string token = HttpContext.Current.Session["token"].ToString();
+            HttpResponseMessage m = new HttpResponseMessage();
+
+            TokenObject tokenValue = new TokenObject();
+            JsonConvert.PopulateObject(token, tokenValue);
+            this.AuthToken = tokenValue.token;            
+
+            var result = await this.Delete("api/v1/projects/192/");
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                return result.ToString();
             }
             else
             {
